@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Northeast Los Angeles Wildfire Alert</title>
+    <!-- Leaflet.js for free maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Bootstrap for Responsive Design -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            height: 60vh;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .alert-box {
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .input-group {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1.display-7 {
+            font-size: 1.75rem;
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        .normal-text {
+            font-size: 1.5rem; 
+        }
+
+        .evacuation-zone-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .evacuation-zone-list li {
+            margin-bottom: 10px;
+        }
+
+        .evacuation-zone-category {
+            font-weight: bold;
+            margin-top: 20px;
+            color: #0056b3;
+        }
+
+        .evacuation-zone-description {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-7">Northeast Los Angeles Fire Alert</h1>
+                <p>Updates, alerts, and air quality of Northeast Los Angeles.</p>
+            </div>
+        </div>
+
+        <div class="row progress-container">
+            <div class="col-12">
+                <h4>Containment: <span id="containment-percentage">3%</span></h4>
+                <div class="progress">
+                    <div class="progress-bar" id="containment-bar" role="progressbar" style="width: 3%" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-warning alert-box" role="alert">
+                    <h4 class="alert-heading">Important: Evacuation Orders</h4>
+                    <p>Evacuation zones have been released for several communities in the Altadena area. </p>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#evacuationModal">View Evacuation Zones</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <br><h3 class="normal-text">Current Air Quality: <span id="air-quality">Hazardous</span></h3><br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h3 class="normal-text">Recent Update: <span id="update">Winds starting to back off, firefighters are now able to start containing the fire.</span></h3><br><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Evacuation Zones -->
+    <div class="modal fade" id="evacuationModal" tabindex="-1" role="dialog" aria-labelledby="evacuationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="evacuationModalLabel">Evacuation Zones</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Evacuation Zones List -->
+                    <h5 class="evacuation-zone-category">Altadena Zones</h5>
+                    <ul class="evacuation-zone-list">
+                        <li>ALD-ARROYOSECO</li>
+                        <li>ALD-CALAVERAS</li>
+                        <li>ALD-CANON</li>
+                        <li>ALD-CASITAS</li>
+                        <li>ALD-CHANEY</li>
+                        <li>ALD-EASTLOMA</li>
+                        <li>ALD-EATONCANYON</li>
+                        <li>ALD-FARNSWORTH</li>
+                        <li>ALD-GARDEN</li>
+                        <li>ALD-GARFIAS</li>
+                        <li>ALD-LAUREL</li>
+                        <li>ALD-MEADOWS</li>
+                        <li>ALD-MENDOCINO</li>
+                        <li>ALD-MIDLOTHIAN</li>
+                        <li>ALD-MILLARD</li>
+                        <li>ALD-MOUNTLOWE</li>
+                        <li>ALD-PALM</li>
+                        <li>ALD-RUBIO</li>
+                        <li>ALD-WAPELLO</li>
+                        <li>ALD-WHITEPARK</li>
+                    </ul>
+
+                    <h5 class="evacuation-zone-category">Arcadia Zones</h5>
+                    <ul class="evacuation-zone-list">
+                        <li>ARC-001</li>
+                    </ul>
+
+                    <h5 class="evacuation-zone-category">La Cañada Flintridge Zones</h5>
+                    <ul class="evacuation-zone-list">
+                        <li>LCF-ALTACANYADA</li>
+                        <li>LCF-BERKSHIRE</li>
+                        <li>LCF-CASTLE</li>
+                        <li>LCF-CIVICCENTER</li>
+                        <li>LCF-COMMONWEALTH</li>
+                        <li>LCF-CREST</li>
+                        <li>LCF-CROWN</li>
+                        <li>LCF-DESCANSO</li>
+                        <li>LCF-FOOTHILLEAST</li>
+                        <li>LCF-FOOTHILLWEST</li>
+                        <li>LCF-HAMPSTEAD</li>
+                        <li>LCF-HILLARD</li>
+                        <li>LCF-INVERNESS</li>
+                        <li>LCF-JPL</li>
+                        <li>LCF-MEMORIAL</li>
+                        <li>LCF-PARADISE</li>
+                        <li>LCF-STARLIGHT</li>
+                    </ul>
+
+                    <h5 class="evacuation-zone-category">Monrovia Zones</h5>
+                    <ul class="evacuation-zone-list">
+                        <li>MRV-101-B</li>
+                        <li>MRV-201-B</li>
+                    </ul>
+
+                    <h5 class="evacuation-zone-category">Pasadena Zones</h5>
+                    <ul class="evacuation-zone-list">
+                        <li>PAS-E001</li>
+                        <li>PAS-E002</li>
+                        <li>PAS-E003</li>
+                        <li>PAS-E006</li>
+                        <li>PAS-E008</li>
+                        <li>PAS-E010</li>
+                        <li>PAS-E012</li>
+                        <li>PAS-E019</li>
+                        <li>PAS-E022</li>
+                    </ul>
+
+                    <h5 class="evacuation-zone-category">Sierra Madre Zones</h5>
+                    <ul class="evacuation-zone-list">
+                        <li>SMD-E001</li>
+                        <li>SMD-E002</li>
+                        <li>SMD-E003</li>
+                        <li>SMD-E004</li>
+                        <li>SMD-E005</li>
+                        <li>SMD-E006</li>
+                        <li>SMD-E007</li>
+                        <li>SMD-E008</li>
+                        <li>SMD-E009</li>
+                        <li>SMD-E010</li>
+                        <li>SMD-E011</li>
+                        <li>SMD-E012</li>
+                        <li>SMD-E013</li>
+                        <li>SMD-E014</li>
+                        <li>SMD-E015</li>
+                        <li>SMD-E016</li>
+                        <li>SMD-E019</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and jQuery scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        const containmentPercentage = 3; // Change this number to update the containment percentage
+
+        let map = L.map('map').setView([34.0953, -118.1480], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+	
+		// Define coordinates and their respective color groups
+		const zones = {
+			HighlandPark: [
+				[34.0900, -118.2100],
+				[34.1200, -118.2100],
+				[34.1200, -118.1700],
+				[34.1000, -118.1700]
+			],
+			SouthPasadena: [
+				[34.1300, -118.1700],
+				[34.1300, -118.1300],
+				[34.1000, -118.1300],
+				[34.1000, -118.1700]
+			],
+			SanMarino: [
+				[34.1400, -118.1300],
+				[34.1100, -118.1300],
+				[34.1100, -118.0900],
+				[34.1400, -118.0900]
+			],
+			SanGabriel: [
+				[34.1100, -118.0900],
+				[34.0900, -118.0900],
+				[34.0900, -118.1300],
+				[34.1100, -118.1300]
+			],
+			Alhambra: [
+				[34.0900, -118.0900],
+				[34.0700, -118.0900],
+				[34.0700, -118.1700],
+				[34.1000, -118.1700],
+				[34.1000, -118.1300],
+				[34.0900, -118.1300]
+			],
+			TempleCity: [
+				[34.1200, -118.0900],
+				[34.1200, -118.0200],
+				[34.0900, -118.0200],
+				[34.0900, -118.0900]
+			],
+			Arcadia: [
+				[34.1200, -118.0900],
+				[34.1200, -118.0100],
+				[34.1500, -118.0100],
+				[34.1500, -118.0900]
+			],
+			Monrovia: [
+				[34.1300, -118.0100],
+				[34.1600, -118.0100],
+				[34.1600, -117.9700],
+				[34.1300, -117.9700]
+			],
+			SierraMadre: [
+				[34.1500, -118.0900],
+				[34.1500, -118.0100],
+				[34.1800, -118.0100],
+				[34.1800, -118.0900]
+			],
+			Pasadena: [
+				[34.1700, -118.0900],
+				[34.1700, -118.1700],
+				[34.1300, -118.1700],
+				[34.1300, -118.1300],
+				[34.1400, -118.1300],
+				[34.1400, -118.0900]
+			],
+			Altadena: [
+				[34.1700, -118.0900],
+				[34.1700, -118.1800],
+				[34.2100, -118.1800],
+				[34.2100, -118.0900]
+			],
+			LaCanada: [
+				[34.1700, -118.1800],
+				[34.2200, -118.1800],
+				[34.2200, -118.2400],
+				[34.1700, -118.2400]
+			],
+			EagleRock: [
+				[34.1700, -118.1700],
+				[34.1700, -118.2200],
+				[34.1200, -118.2200],
+				[34.1200, -118.1700]
+			],
+			Glendale: [
+				[34.1700, -118.2200],
+				[34.1200, -118.2200],
+				[34.1200, -118.2700],
+				[34.1700, -118.2700]
+			]
+		};
+
+		// Define the color groups
+		const colorGroups = {
+			redZones: ['Altadena', 'LaCanada'],
+			orangeZones: ['Glendale', 'EagleRock', 'Pasadena', 'SierraMadre'],
+			yellowZones: ['HighlandPark', 'SouthPasadena', 'SanMarino', 'Arcadia', 'Monrovia', 'TempleCity', 'SanGabriel', 'Alhambra']
+		};
+
+		// Loop through the zones and add the polygons with the appropriate colors
+		for (const zone in zones) {
+			let color = '#FFFF99';  
+			let fillOpacity = .2; 
+
+			if (colorGroups.redZones.includes(zone)) {
+				color = '#FF6666';  
+			} else if (colorGroups.orangeZones.includes(zone)) {
+				color = '#FFB84D';  
+			} else if (colorGroups.yellowZones.includes(zone)) {
+				color = '#FFCC00'; 
+			}
+
+			// Add the polygon to the map
+			L.polygon(zones[zone], {
+				color: color,        
+				weight: 4,           
+				fillColor: color,    
+				fillOpacity: fillOpacity 
+			}).addTo(map);
+		}
+
+		// Find the center of the Altadena polygon
+		const altadenaCenter = [
+			(34.1700 + 34.2100) / 2,  
+			( -118.0900 + -118.1800) / 2  
+		];
+
+		// Create a fire icon (using a simple fire emoji as the icon for now)
+		const fireIcon = L.divIcon({
+			className: 'fire-icon',
+			html: '<span style="font-size: 30px;">🔥</span>', 
+			iconSize: [30, 30],  
+			iconAnchor: [15, 15] 
+		});
+
+		// Place the fire icon at the center of Altadena
+		L.marker(altadenaCenter, {
+			icon: fireIcon
+		})
+		.addTo(map)
+		.bindTooltip("The Eaton Fire was started in Altadena", {
+			permanent: false,     
+			opacity: 0.9           
+		});
+
+        // Update the containment percentage and bar width
+        const containmentBar = document.getElementById('containment-bar');
+        const percentageText = document.getElementById('containment-percentage');
+
+        percentageText.textContent = `${containmentPercentage}%`;
+        containmentBar.style.width = `${containmentPercentage}%`;
+        containmentBar.setAttribute('aria-valuenow', containmentPercentage);
+
+        // Change color of the bar based on the containment percentage
+        if (containmentPercentage <= 30) {
+            containmentBar.style.backgroundColor = 'red'; 
+        } else if (containmentPercentage <= 60) {
+            containmentBar.style.backgroundColor = 'yellow';
+        } else {
+            containmentBar.style.backgroundColor = 'green'; 
+        }
+    </script>
+</body>
+</html>
