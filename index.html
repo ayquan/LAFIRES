@@ -84,7 +84,7 @@
 
         <div class="row progress-container">
             <div class="col-12">
-                <h4>Containment: <span id="containment-percentage">3%</span></h4>
+                <h4>Containment: <span id="containment-percentage">45%</span></h4>
                 <div class="progress">
                     <div class="progress-bar" id="containment-bar" role="progressbar" style="width: 3%" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
@@ -109,13 +109,13 @@
 
         <div class="row">
             <div class="col">
-                <br><h3 class="normal-text">Current Air Quality: <span id="air-quality">Hazardous</span></h3><br>
+                <br><h3 class="normal-text">Current Air Quality: <span id="air-quality">Good</span></h3><br>
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <h3 class="normal-text">Recent Update: <span id="update">Winds starting to back off, firefighters are now able to start containing the fire.</span></h3><br><br>
+                <h3 class="normal-text">Recent Update: <span id="update">Winds backing off, fires are being contained and workers are able to start cleaning up the damage.</span></h3><br><br>
             </div>
         </div>
     </div>
@@ -235,7 +235,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 
     <script>
-        const containmentPercentage = 3; // Change this number to update the containment percentage
+        const containmentPercentage = 45; // Change this number to update the containment percentage
 
         let map = L.map('map').setView([34.0953, -118.1480], 11);
 
@@ -337,9 +337,10 @@
 
 		// Define the color groups
 		const colorGroups = {
-			redZones: ['Altadena', 'LaCanada'],
-			orangeZones: ['Glendale', 'EagleRock', 'Pasadena', 'SierraMadre'],
-			yellowZones: ['HighlandPark', 'SouthPasadena', 'SanMarino', 'Arcadia', 'Monrovia', 'TempleCity', 'SanGabriel', 'Alhambra']
+			redZones: ['Altadena'],
+			orangeZones: ['LaCanada','SierraMadre'],
+			yellowZones: ['Glendale', 'EagleRock', 'Arcadia','Pasadena'],
+            clearZones: ['HighlandPark', 'SouthPasadena', 'SanMarino', 'Monrovia', 'TempleCity', 'SanGabriel', 'Alhambra']
 		};
 
 		// Loop through the zones and add the polygons with the appropriate colors
@@ -354,6 +355,9 @@
 			} else if (colorGroups.yellowZones.includes(zone)) {
 				color = '#FFCC00'; 
 			}
+            else{
+                color = '#FFFFFF';
+            }
 
 			// Add the polygon to the map
 			L.polygon(zones[zone], {
