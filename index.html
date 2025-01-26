@@ -109,13 +109,13 @@
 
         <div class="row">
             <div class="col">
-                <br><h3 class="normal-text">Current Air Quality: <span id="air-quality">Good</span></h3><br>
+                <br><h3 class="normal-text">Current Air Quality: <span id="air-quality">Moderate</span></h3><br>
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <h3 class="normal-text">Recent Update: <span id="update">Winds backing off, fires are being contained and workers are able to start cleaning up the damage.</span></h3><br><br>
+                <h3 class="normal-text">Recent Update: <span id="update">Firefighters have kept the fire to 95% containment, with the blaze now out of residential areas. Water and air quality still bad. </span></h3><br><br>
             </div>
         </div>
     </div>
@@ -134,92 +134,37 @@
                     <!-- Evacuation Zones List -->
                     <h5 class="evacuation-zone-category">Altadena Zones</h5>
                     <ul class="evacuation-zone-list">
-                        <li>ALD-ARROYOSECO</li>
-                        <li>ALD-CALAVERAS</li>
-                        <li>ALD-CANON</li>
-                        <li>ALD-CASITAS</li>
-                        <li>ALD-CHANEY</li>
-                        <li>ALD-EASTLOMA</li>
-                        <li>ALD-EATONCANYON</li>
                         <li>ALD-FARNSWORTH</li>
-                        <li>ALD-GARDEN</li>
-                        <li>ALD-GARFIAS</li>
                         <li>ALD-LAUREL</li>
-                        <li>ALD-MEADOWS</li>
-                        <li>ALD-MENDOCINO</li>
-                        <li>ALD-MIDLOTHIAN</li>
-                        <li>ALD-MILLARD</li>
+                        <li>ALD-CHANEY</li>
+                        <li>ALD-RUBIO</li>
+                        <li>ALD-CANON</li>
+                        <li>ALD-GARDEN</li>
+                        <li>ALD-WAPELLO</li>
                         <li>ALD-MOUNTLOWE</li>
                         <li>ALD-PALM</li>
-                        <li>ALD-RUBIO</li>
-                        <li>ALD-WAPELLO</li>
-                        <li>ALD-WHITEPARK</li>
+                        
                     </ul>
 
                     <h5 class="evacuation-zone-category">Arcadia Zones</h5>
                     <ul class="evacuation-zone-list">
-                        <li>ARC-001</li>
+        
                     </ul>
 
                     <h5 class="evacuation-zone-category">La Cañada Flintridge Zones</h5>
                     <ul class="evacuation-zone-list">
-                        <li>LCF-ALTACANYADA</li>
-                        <li>LCF-BERKSHIRE</li>
-                        <li>LCF-CASTLE</li>
-                        <li>LCF-CIVICCENTER</li>
-                        <li>LCF-COMMONWEALTH</li>
-                        <li>LCF-CREST</li>
-                        <li>LCF-CROWN</li>
-                        <li>LCF-DESCANSO</li>
-                        <li>LCF-FOOTHILLEAST</li>
-                        <li>LCF-FOOTHILLWEST</li>
-                        <li>LCF-HAMPSTEAD</li>
-                        <li>LCF-HILLARD</li>
-                        <li>LCF-INVERNESS</li>
-                        <li>LCF-JPL</li>
-                        <li>LCF-MEMORIAL</li>
-                        <li>LCF-PARADISE</li>
-                        <li>LCF-STARLIGHT</li>
                     </ul>
 
                     <h5 class="evacuation-zone-category">Monrovia Zones</h5>
                     <ul class="evacuation-zone-list">
-                        <li>MRV-101-B</li>
-                        <li>MRV-201-B</li>
                     </ul>
 
                     <h5 class="evacuation-zone-category">Pasadena Zones</h5>
                     <ul class="evacuation-zone-list">
-                        <li>PAS-E001</li>
-                        <li>PAS-E002</li>
-                        <li>PAS-E003</li>
-                        <li>PAS-E006</li>
-                        <li>PAS-E008</li>
-                        <li>PAS-E010</li>
-                        <li>PAS-E012</li>
-                        <li>PAS-E019</li>
-                        <li>PAS-E022</li>
                     </ul>
 
                     <h5 class="evacuation-zone-category">Sierra Madre Zones</h5>
                     <ul class="evacuation-zone-list">
-                        <li>SMD-E001</li>
-                        <li>SMD-E002</li>
-                        <li>SMD-E003</li>
-                        <li>SMD-E004</li>
-                        <li>SMD-E005</li>
-                        <li>SMD-E006</li>
-                        <li>SMD-E007</li>
-                        <li>SMD-E008</li>
-                        <li>SMD-E009</li>
-                        <li>SMD-E010</li>
-                        <li>SMD-E011</li>
-                        <li>SMD-E012</li>
-                        <li>SMD-E013</li>
-                        <li>SMD-E014</li>
-                        <li>SMD-E015</li>
-                        <li>SMD-E016</li>
-                        <li>SMD-E019</li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -235,7 +180,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 
     <script>
-        const containmentPercentage = 81; // Change this number to update the containment percentage
+        const containmentPercentage = 95; // Change this number to update the containment percentage
 
         let map = L.map('map').setView([34.0953, -118.1480], 11);
 
@@ -337,10 +282,10 @@
 
 		// Define the color groups
 		const colorGroups = {
-			redZones: ['Altadena'],
-			orangeZones: ['LaCanada','SierraMadre'],
-			yellowZones: ['Glendale', 'EagleRock', 'Arcadia','Pasadena'],
-            clearZones: ['HighlandPark', 'SouthPasadena', 'SanMarino', 'Monrovia', 'TempleCity', 'SanGabriel', 'Alhambra']
+			redZones: [],
+			orangeZones: [],
+			yellowZones: ['Altadena'],
+            clearZones: ['Glendale', 'EagleRock', 'Arcadia','Pasadena','LaCanada','SierraMadre','HighlandPark', 'SouthPasadena', 'SanMarino', 'Monrovia', 'TempleCity', 'SanGabriel', 'Alhambra']
 		};
 
 		// Loop through the zones and add the polygons with the appropriate colors
